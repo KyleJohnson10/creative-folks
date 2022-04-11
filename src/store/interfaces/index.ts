@@ -16,7 +16,12 @@ export interface IPost {
 }
 
 export interface IComment {
-  id: number;
+  id: number | string;
   body: string;
   postId: number;
+}
+
+export interface ICommentFormValues {
+  id: number | string;
+  body: string;
 }

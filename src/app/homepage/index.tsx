@@ -4,13 +4,13 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, navigate } from '@reach/router';
 import styled from 'styled-components';
 import { Container, Row, Col } from 'styled-bootstrap-grid';
 import { AppContext } from '../../store/AppContext';
-import { isNull } from 'cypress/types/lodash';
+import { AddCommentForm } from '../../components/AddCommentForm';
 
-const HomepageContainer = styled(Container)`
+export const BodyContainer = styled(Container)`
   @media (min-width: 1280px) {
     max-width: 1280px;
   }
@@ -20,7 +20,7 @@ const HomepageContainer = styled(Container)`
   }
 `;
 
-const StyledRow = styled(Row)`
+export const StyledRow = styled(Row)`
   margin-right: 0;
   margin-top: 32px;
   margin-left: 0;
@@ -47,24 +47,14 @@ const CommentBox = styled.div`
   margin-top: 8px;
   padding: 32px;
   background-color: #f3f4f6;
-`;
-
-const FormContainer = styled.div`
-  padding-top: 32px;
-  width: 100%;
+  cursor: pointer;
 `;
 
 export const Homepage: FunctionComponent<RouteComponentProps> = () => {
   const {
     state: { comments, posts },
-    updateState,
   } = useContext(AppContext);
   const [openComments, setOpenComments] = useState<number[]>([]);
-
-  useEffect(() => {
-    console.log(posts);
-    console.log(comments);
-  }, []);
 
   const onButtonClick = (i: number) => {
     if (openComments.includes(i)) {
@@ -74,23 +64,18 @@ export const Homepage: FunctionComponent<RouteComponentProps> = () => {
     }
   };
 
-  const handleSubmitComment = (e: React.FormEvent<HTMLFormElement>, postId: number): void => {
-    e.preventDefault();
-    console.log(e);
-    console.log(postId);
-    //updateState({
-    //  comments: [
-    //    {
-    //      body: e.target[1].value,
-    //      id: e.target[0].value,
-    //      postId: 3,
-    //    },
-    //  ],
-    //});
+  const postHasValidComments = (postId: number): boolean => {
+    let hasComments = false;
+    comments?.forEach(comment => {
+      if (comment.postId === postId) {
+        hasComments = true;
+      }
+    });
+    return hasComments;
   };
 
   return (
-    <HomepageContainer>
+    <BodyContainer>
       <h1>React Challenge</h1>
       <StyledRow>
         {posts?.map((post, i) => (
@@ -108,44 +93,36 @@ export const Homepage: FunctionComponent<RouteComponentProps> = () => {
               </ButtonLink>
               {openComments.includes(post.id) && (
                 <>
-                  {comments?.map((comment, c) => (
+                  {comments?.map(comment => (
                     <>
                       {comment.postId === post.id && (
-                        <CommentBox>
-                          <h3>
-                            This comment belongs to post id: {comment.postId}
-                          </h3>
-                          <p style={{ padding: '24px 0' }}>{comment.body}</p>
-                          <p className="p--sm">
-                            Comment ID: {comment.id} - Comment Post ID:{' '}
-                            {comment.postId}
-                          </p>
-                        </CommentBox>
+                          <CommentBox onClick={() => {
+                            navigate('/comment/' + post.id)
+                          }}>
+                            <h3>
+                              This comment belongs to post id: {comment.postId}
+                            </h3>
+                            <p style={{ padding: '24px 0' }}>{comment.body}</p>
+                            <p className="p--sm">
+                              Comment ID: {comment.id} - Comment Post ID:{' '}
+                              {comment.postId}
+                            </p>
+                          </CommentBox>
                       )}
                     </>
                   ))}
-                  <FormContainer>
-                    <p style={{ marginBottom: '16px' }} className="p--xl">
-                      Add Comment
+                  {postHasValidComments(post.id) === false && (
+                    <p style={{ marginBottom: '16px', marginTop: '8px' }} className="p--xl">
+                      There are no comments to display
                     </p>
-                    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-                      handleSubmitComment(e, post.id)}
-                    }>
-                      <input
-                        style={{ marginBottom: '16px' }}
-                        type="text"
-                        placeholder="id"
-                      />
-                      <textarea placeholder="Comment body..." />
-                      <button type="submit">Add Comment</button>
-                    </form>
-                  </FormContainer>
+                  )}
+                  <AddCommentForm postId={post.id} />
                 </>
               )}
             </StretchedColumn>
           </StyledColumn>
         ))}
       </StyledRow>
-    </HomepageContainer>
+    </BodyContainer>
   );
 };
