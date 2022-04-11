@@ -32,7 +32,7 @@ export const AddCommentForm: FunctionComponent<IAddCommentForm> = (
   const idIsUnique = (id: number | string): boolean => {
     let isUnique = true;
     comments?.forEach(comment => {
-      if (comment.id == id) {
+      if (comment.id === id) {
         isUnique = false;
       }
     });
@@ -49,7 +49,7 @@ export const AddCommentForm: FunctionComponent<IAddCommentForm> = (
 
   const handleSubmitComment = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (comments && idIsUnique(formValues.id) === true) {
+    if (comments && idIsUnique(typeof formValues.id == "string" ? parseInt(formValues.id) : formValues.id) === true) {
       setError('');
       updateState({
         comments: [
