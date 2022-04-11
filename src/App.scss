@@ -30,3 +30,41 @@ p {
   line-height: 1.25rem;
   color: #6B7280;
 }
+
+.p--xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  font-size: 100%;
+  border-radius: 0.25rem;
+  border: 1px solid #e5e7eb;
+}
+
+textarea {
+  width: 100% !important;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  font-size: 100%;
+  min-height: 188px;
+  border-radius: 0.25rem;
+  border: 1px solid #e5e7eb;
+  font-family: inherit;
+  margin-bottom: 32px;
+}
+
+button {
+  padding: 8px 24px;
+  background-color: #A855F7;
+  color: #fff;
+  font-family: inherit;
+  border: 0;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  font-size: 100%;
+  line-height: 1.5;
+}

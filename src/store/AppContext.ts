@@ -37,4 +37,5 @@ export const DefaultState: IState = {
 
 export const AppContext = createContext<IAppContext>({
   state: DefaultState,
+  updateState: () => null,
 });

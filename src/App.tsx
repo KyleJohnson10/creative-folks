@@ -6,10 +6,16 @@ import { IState } from './store/interfaces'
 
 function App() {
   const [state, setState] = useState<IState>(DefaultState);
+
+  const updateState = (value: IState): void => {
+    const updatedState = { ...state, ...value };
+    setState(updatedState)
+  }
   return (
       <AppContext.Provider
         value={{
           state: state,
+          updateState: updateState,
         }}>
         <AppRouter />
       </AppContext.Provider>
