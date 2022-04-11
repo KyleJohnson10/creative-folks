@@ -50,7 +50,7 @@ export const AddCommentForm: FunctionComponent<IAddCommentForm> = (
   const handleSubmitComment = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (comments && idIsUnique(formValues.id) === true) {
-      setError('')
+      setError('');
       updateState({
         comments: [
           ...comments,
@@ -60,6 +60,10 @@ export const AddCommentForm: FunctionComponent<IAddCommentForm> = (
             postId: postId,
           },
         ],
+      });
+      setFormValues({
+        id: '',
+        body: '',
       });
     } else {
       // show error
@@ -78,7 +82,7 @@ export const AddCommentForm: FunctionComponent<IAddCommentForm> = (
       </p>
       <form onSubmit={handleSubmitComment}>
         <input
-          style={ error ? { marginBottom: '8px' } : { marginBottom: '16px' }}
+          style={error ? { marginBottom: '8px' } : { marginBottom: '16px' }}
           name="id"
           value={formValues.id}
           onChange={handleInputChange}
